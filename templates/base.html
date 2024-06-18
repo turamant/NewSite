@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Blog{% endblock %}</title>
+    <script src="https://kit.fontawesome.com/d8aed7f907.js" crossorigin="anonymous"></script>
+    <script src="{% static 'js/script.js' %}" defer></script>
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+<div class="fixed top-0 w-full z-50">
+    <header class="bg-blue-500 text-white py-4">
+    <div class="container mx-auto flex justify-between items-center">
+        <a href="{% url 'blog:post_list' %}" class="text-xl font-bold">My Blog</a>
+        <div class="flex space-x-4">
+            {% if user.is_authenticated %}
+                <span class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                    user: {{ user.username }}
+                </span>
+                <a href="{% url 'accounts:profile' %}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                    Profile
+                </a>
+                {% if user.is_staff %}
+                    <a href="{% url 'blog:unapproved_comments' %}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                        Править комменты
+                    </a>
+                    <a href="{% url 'blog:post_create' %}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                        +New Post
+                    </a>
+                {% endif %}
+                <a href="{% url 'accounts:logout' %}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    Logout
+                </a>
+                <form id="logout-form" action="{% url 'accounts:logout' %}" method="post" style="display: none;">
+                    {% csrf_token %}
+                </form>
+            {% else %}
+                <a href="{% url 'accounts:register' %}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                    Register
+                </a>
+                <a href="{% url 'accounts:login' %}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                    Login
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+</div>
+
+    <main class="container mx-auto my-8">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-gray-800 text-white py-4 mt-8">
+        <div class="container mx-auto text-center">
+            &copy; 2024 New Site. All rights reserved.
+        </div>
+    </footer>
+
+
+<!-- Модальное окно -->
+<div id="commentModal" class="fixed z-10 inset-0 overflow-y-auto opacity-0 scale-90 transition-all duration-300 invisible">
+    <div class="flex items-center justify-center min-h-screen">
+        <div class="bg-blue-500 text-white rounded-lg shadow-lg w-full max-w-md p-6">
+            <h2 class="text-xl font-bold mb-4">Комментарии</h2>
+            <div id="commentList">
+                <!-- Здесь будут отображаться комментарии -->
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

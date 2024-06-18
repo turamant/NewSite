@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-md p-8">
+  <h1 class="text-3xl font-bold mb-4">Profile</h1>
+  {% if user.profile_picture %}
+            <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}" class="max-w-full h-auto mb-4">
+  {% endif %}
+  <div class="bg-gray-100 rounded-lg p-4">
+
+  <p class="text-gray-500 mb-2">Username: {{ user.username }}</p>
+  <p class="text-gray-500 mb-2">Email: {{ user.email }}</p>
+  {# Другая информация о пользователе #}
+  <p class="text-gray-500 mb-2">age: {{ user.age }}</p>
+  <p class="text-gray-500 mb-2">phone: {{ user.phone_number }}</p>
+  <p class="text-gray-500 mb-2">bio: {{ user.bio }}</p>
+  <p class="text-gray-500 mb-2">location: {{ user.location }}</p>
+  </div>
+</div>
+{% endblock %}
